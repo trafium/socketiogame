@@ -6,7 +6,6 @@ function initSocket() {
 
   socket.on('initPlayer', function(options) {
     new Entity(options);
-    console.log('initPlayer', options);
   });
 
   socket.on('newPlayer', function(options) {
@@ -14,40 +13,29 @@ function initSocket() {
   });
 
   socket.on('getPlayers', function(players) {
-    console.log(players);
-    for (var i = 0; i < players.length; i++) {
-      if (!player || players[i].id != player.id) {
-        new Entity(players[i])
+    for (var key in players) {
+      if (players.hasOwnProperty(key)) {
+        new Entity(players[key]);
       }
     }
   });
 
-  socket.on('moved', function(data) {
-    var id = data.id;
-    var entity;
-
-    for (var i = 0; i < entities.length; i++) {
-      if (entities[i].id == id) {
-        entity = entities[i];
-        break;
-      }
-    }
-    if (entity) {
-      entity.x = data.x;
-      entity.y = data.y;
-    }
-  });
-
-  socket.on('playerDisconnected', function(id) {
+  socket.on('playerDisconnected', function(socketId) {
+    var entity = entities[socketId];
     var found = false;
-    for (var i = 0; i < entities.length; i++) {
-      if (entities[i].id == id) {
-        found = true;
-        break;
-      }
+    if (entity) {
+      entity.destroy();
     }
-    if (found) {
-      entities[i].destroy();
+  });
+
+  socket.on('updateEntities', function(newEntitiesData) {
+    for (var key in newEntitiesData) {
+      if (newEntitiesData.hasOwnProperty(key)) {
+        var entity = entities[key];
+        if (entity) {
+          Object.assign(entity, newEntitiesData[key]);
+        }
+      }
     }
   });
 

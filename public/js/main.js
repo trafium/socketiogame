@@ -12,7 +12,7 @@ var Sprite = PIXI.Sprite;
 var loader = PIXI.loader;
 var resources = PIXI.loader.resources;
 
-var entities = [];
+var entities = {};
 
 loader
 	.add([
@@ -32,16 +32,27 @@ function setup() {
 function gameLoop() {
 	requestAnimationFrame(gameLoop);
 
-	for (var i = 0; i < entities.length; i++) {
-		entities[i].update();
+	for (var key in entities) {
+		if (entities.hasOwnProperty(key)) {
+			entities[key].update();
+		}
 	}
 
 	renderer.render(stage);
 }
 
-view.addEventListener('mousemove', function(event) {
-	if (event.buttons == 1) {
+var keys = [87, 65, 83, 68];
+window.addEventListener('keydown', function(event) {
+	if (keys.indexOf(event.which) != -1) {
+		console.log(event.which);
 		var rect = view.getBoundingClientRect();
-		socket.emit('moved', { x: event.clientX - rect.left, y: event.clientY - rect.top } );
+		socket.emit('keydown', event.which);
+	}
+});
+
+window.addEventListener('keyup', function(event) {
+	if (keys.indexOf(event.which) != -1) {
+		var rect = view.getBoundingClientRect();
+		socket.emit('keyup', event.which);
 	}
 });

@@ -3,8 +3,7 @@ var fs = require('fs');
 var path = require('path');
 var url = require('url');
 var mime = require('mime');
-
-console.log('boom');
+entities = {};
 
 var server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
@@ -26,7 +25,6 @@ var server = http.createServer((req, res) => {
     }
   }
 }).listen(process.env.PORT || 8080);
-require('./lib/socket.js')(server);
 
 function serveStatic(pathname, res) {
   fs.exists('./public' + pathname, (exists) => {
@@ -45,3 +43,6 @@ function send404(res) {
   res.writeHead(404, { 'Content-Type': 'text/plain' });
   res.end('404: Requested file not found.');
 }
+
+require('./lib/socket.js')(server);
+require('./lib/main.js')();

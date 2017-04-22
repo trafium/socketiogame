@@ -10,7 +10,9 @@ function Entity(options) {
 	this.sprite.anchor.set(0.5, 0.5);
 	stage.addChild(this.sprite);
 
-	entities.push(this);
+	console.log(socket);
+
+	entities[options.socket] = this;
 }
 
 Entity.prototype = {
@@ -20,11 +22,7 @@ Entity.prototype = {
 	destroy: function() {
 		stage.removeChild(this.sprite);
 		this.sprite = null;
-		entities.splice(entities.indexOf(this), 1);
-	},
-	moveTo: function(x, y) {
-		this.x = x;
-		this.y = y;
-		socket.emit('moved', { id: this.id, x: this.x, y: this.y });
+
+		delete entities[this.socket];
 	}
 }
