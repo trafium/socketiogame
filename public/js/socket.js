@@ -33,7 +33,7 @@ function initSocket() {
       if (newEntitiesData.hasOwnProperty(key)) {
         var entity = entities[key];
         if (entity) {
-          Object.assign(entity, newEntitiesData[key]);
+          entity.assign(newEntitiesData[key]);
         }
       }
     }

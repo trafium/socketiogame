@@ -1,10 +1,12 @@
 function Entity(options) {
+	console.log(options);
 	this.x = options.x;
 	this.y = options.y;
 	this.id = options.id;
 	this.socket = options.socket;
 
-	this.sprite = new Sprite(resources['res/img/smiley.png'].texture);
+	this.spriteIndex = options.spriteIndex;
+	this.sprite = new Sprite(resources[Entity.sprites[this.spriteIndex]].texture);
 	this.sprite.position.set(this.x, this.y);
 	this.sprite.scale.set(0.5, 0.5);
 	this.sprite.anchor.set(0.5, 0.5);
@@ -24,5 +26,19 @@ Entity.prototype = {
 		this.sprite = null;
 
 		delete entities[this.socket];
+	},
+	assign: function(newAttributes) {
+		var oldAttributes = Object.assign({}, this);
+		for (var key in newAttributes) {
+			if (newAttributes.hasOwnProperty(key)) {
+				this[key] = newAttributes[key];
+			}
+		}
+
+		if (newAttributes.spriteIndex != oldAttributes.spriteIndex) {
+			this.sprite.texture = resources[Entity.sprites[this.spriteIndex]].texture;
+		}
 	}
 }
+
+Entity.sprites = ['res/img/smiley.png', 'res/img/smiley2.png'];

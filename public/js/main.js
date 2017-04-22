@@ -17,7 +17,8 @@ var entities = {};
 loader
 	.add([
 		'res/img/grass_0.png',
-		'res/img/smiley.png'
+		'res/img/smiley.png',
+		'res/img/smiley2.png'
 		])
 	.load(setup);
 
@@ -41,10 +42,10 @@ function gameLoop() {
 	renderer.render(stage);
 }
 
-var keys = [87, 65, 83, 68];
+var keys = [87, 65, 83, 68, 32];
 window.addEventListener('keydown', function(event) {
+	console.log(event.which);
 	if (keys.indexOf(event.which) != -1) {
-		console.log(event.which);
 		var rect = view.getBoundingClientRect();
 		socket.emit('keydown', event.which);
 	}
