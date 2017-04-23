@@ -3,14 +3,18 @@ var view = renderer.view
 
 document.body.appendChild(renderer.view);
 
-var stage = new PIXI.Container();
-
+var Container = PIXI.Container;
 var TextureCache = PIXI.utils.TextureCache;
 var TilingSprite = PIXI.extras.TilingSprite;
 var Sprite = PIXI.Sprite;
+var Graphics = PIXI.Graphics;
 
 var loader = PIXI.loader;
 var resources = PIXI.loader.resources;
+
+var stage = new Container();
+var stageObjects = new Container();
+var interfaceObjects = new Container();
 
 var entities = {};
 
@@ -26,6 +30,8 @@ function setup() {
 	initSocket();
 	var grass = new TilingSprite(resources['res/img/grass_0.png'].texture, view.width, view.height);
 	stage.addChild(grass);
+	stage.addChild(stageObjects);
+	stage.addChild(interfaceObjects);
 
 	gameLoop();
 }
@@ -38,6 +44,10 @@ function gameLoop() {
 			entities[key].update();
 		}
 	}
+
+	stageObjects.children.sort(function(a, b) {
+		return a.y - b.y
+	});
 
 	renderer.render(stage);
 }

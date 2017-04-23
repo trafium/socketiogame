@@ -35,6 +35,14 @@ function initSocket() {
         if (entity) {
           entity.assign(newEntitiesData[key]);
         }
+      }wa
+    }
+
+    for (var key in entities) {
+      if (entities.hasOwnProperty(key)) {
+        if (!newEntitiesData[key]) {
+          entities[key].destroy();
+        }
       }
     }
   });

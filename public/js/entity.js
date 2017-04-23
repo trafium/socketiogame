@@ -1,18 +1,26 @@
 function Entity(options) {
-	console.log(options);
-	this.x = options.x;
-	this.y = options.y;
-	this.id = options.id;
-	this.socket = options.socket;
+	Object.assign(this, options);
+
+	this.healthContainer = new Container();
+	var blackRect = new Graphics();
+	blackRect.beginFill(0x000000);
+	blackRect.drawRect(0, 0, 50, 10);
+	this.healthBar = new Graphics();
+	this.healthBar.beginFill(0x00FF00);
+	this.healthBar.drawRect(1, 1, 48, 8);
+
+	this.healthContainer.addChild(blackRect);
+	this.healthContainer.addChild(this.healthBar);
+
+	interfaceObjects.addChild(this.healthContainer);
 
 	this.spriteIndex = options.spriteIndex;
 	this.sprite = new Sprite(resources[Entity.sprites[this.spriteIndex]].texture);
 	this.sprite.position.set(this.x, this.y);
 	this.sprite.scale.set(0.5, 0.5);
 	this.sprite.anchor.set(0.5, 0.5);
-	stage.addChild(this.sprite);
 
-	console.log(socket);
+	stageObjects.addChild(this.sprite);
 
 	entities[options.socket] = this;
 }
@@ -20,10 +28,16 @@ function Entity(options) {
 Entity.prototype = {
 	update: function() {
 		this.sprite.position.set(this.x, this.y);
+		this.healthContainer.position.set(this.x - this.healthContainer.width/2, this.y - 46);
+		this.healthBar.width = (48 / 100) * this.health;
 	},
 	destroy: function() {
-		stage.removeChild(this.sprite);
+		stageObjects.removeChild(this.sprite);
+		interfaceObjects.removeChild(this.healthContainer);
+
 		this.sprite = null;
+		this.healthContainer = null;
+		this.healthBar = null;
 
 		delete entities[this.socket];
 	},
