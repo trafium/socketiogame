@@ -22,7 +22,8 @@ loader
 	.add([
 		'res/img/grass_0.png',
 		'res/img/smiley.png',
-		'res/img/smiley2.png'
+		'res/img/smiley2.png',
+		'res/img/bullet.png'
 		])
 	.load(setup);
 
@@ -56,10 +57,17 @@ var keys = [87, 65, 83, 68, 32];
 window.addEventListener('keydown', function(event) {
 	console.log(event.which);
 	if (keys.indexOf(event.which) != -1) {
-		var rect = view.getBoundingClientRect();
 		socket.emit('keydown', event.which);
 	}
 });
+
+window.addEventListener('mousedown', function(event) {
+	var rect = view.getBoundingClientRect();
+	var target = { x: event.clientX - rect.left, y: event.clientY - rect.top };
+	console.log(target);
+
+	socket.emit('fire', target);
+})
 
 window.addEventListener('keyup', function(event) {
 	if (keys.indexOf(event.which) != -1) {

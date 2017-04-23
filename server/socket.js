@@ -1,30 +1,27 @@
 var socketio = require('socket.io');
 var Entity = require('./entity')
+var Player = require('./player.js')
 
 module.exports = (server) => {
-  io = socketio.listen(server);
+  var io = socketio.listen(server);
 
   io.on('connection', (socket) => {
     io.to(socket.id).emit('getPlayers', entities);
     
-    var newPlayer = new Entity(Math.random()*512, Math.random()*512, socket.id);
-    io.to(socket.id).emit('initPlayer', newPlayer);
-    socket.broadcast.to('main').emit('newPlayer', newPlayer)
-    
-    console.log('Socket connected: ' + socket.id);
+    var newPlayer = new Player();
+
+    socket.entityId = newPlayer.id;
+
     socket.join('main');
+    console.log('Socket connected: ' + socket.id);
 
-    socket.on('postLine', (line) => {
-      // lines.push(line);
-      socket.broadcast.to('main').emit('getLine', line);
-    });
-
-    socket.on('postCurrentImage', (image) => {
-      currentImage = image;
+    socket.on('fire', function(target) {
+      var entity = entities[socket.entityId];
+      entity.fire(target);
     });
 
     socket.on('keydown', function(data) {
-      var entity = entities[socket.id];
+      var entity = entities[socket.entityId];
 
       if (entity) {
         switch(data) {
@@ -49,7 +46,7 @@ module.exports = (server) => {
     });
 
     socket.on('keyup', function(data) {
-      var entity = entities[socket.id];
+      var entity = entities[socket.entityId];
 
       if (entity) {
         switch(data) {
@@ -82,11 +79,13 @@ module.exports = (server) => {
     });
 
     socket.on('disconnect', function() {
-      entity = entities[socket.id]
+      console.log('Socket disconnected: '+socket.id);
+      entity = entities[socket.entityId]
       if (entity) {
-        delete entities[socket.id]
-        io.to('main').emit('playerDisconnected', socket.id);
+        delete entities[socket.entityId]
       }
     });
   });
+
+  return io
 }

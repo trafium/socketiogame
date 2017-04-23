@@ -1,4 +1,4 @@
-module.exports = () => {
+module.exports = (io) => {
 	function main() {
 		for (var key in entities) {
 			if (entities.hasOwnProperty(key)) {
