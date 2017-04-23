@@ -7,10 +7,9 @@ app.get('', function(req, res) {
 });
 app.use('/', express.static('client'));
 
-serv.listen(8080);
+serv.listen(process.env.PORT || 8080);
 
 entities = {};
-
 entitiesId = 0;
 
 var io = require('./server/socket.js')(serv);
