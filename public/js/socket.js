@@ -35,7 +35,7 @@ function initSocket() {
         if (entity) {
           entity.assign(newEntitiesData[key]);
         }
-      }wa
+      }
     }
 
     for (var key in entities) {
