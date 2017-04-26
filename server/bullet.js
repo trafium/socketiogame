@@ -8,7 +8,7 @@ function Bullet(owner, target) {
 	
 	this.owner = owner;
 	this.direction = Math.atan2(target.y - this.y, target.x - this.x);
-	this.speed = 5;
+	this.speed = 10;
 
 	bullets[this.id] = this;
 }
