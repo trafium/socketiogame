@@ -8,7 +8,9 @@ function Bullet(owner, target) {
 	
 	this.owner = owner;
 	this.direction = Math.atan2(target.y - this.y, target.x - this.x);
-	this.speed = 10;
+	this.speed = 5;
+
+	bullets[this.id] = this;
 }
 
 Bullet.prototype = Object.create(Entity.prototype);
@@ -21,16 +23,16 @@ Object.assign(Bullet.prototype, {
 		this.y += this.speed * Math.sin(this.direction);
 
 		if (this.x > 512 || this.x < 0 || this.y > 512 || this.y < 0) {
-			delete entities[this.id];
+			delete bullets[this.id];
 		}
 
-		for (var key in entities) {
-			if (entities.hasOwnProperty(key)) {
-				var entity = entities[key]
-				if (entity.type == 'Player' && this.owner != entity) {
-					if (this.checkCollision(entity)) {
-						entity.getHurt(10);
-						delete entities[this.id];
+		for (var key in players) {
+			if (players.hasOwnProperty(key)) {
+				var player = players[key]
+				if (player.type == 'Player' && this.owner != player) {
+					if (this.checkCollision(player)) {
+						player.getHurt(10);
+						delete bullets[this.id];
 					}
 				}
 			}

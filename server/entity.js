@@ -17,7 +17,6 @@ function Entity(x, y) {
 
 	entitiesId++;
 
-	entities[this.id] = this;
 }
 
 Entity.prototype = {

@@ -9,7 +9,8 @@ app.use('/', express.static('client'));
 
 serv.listen(process.env.PORT || 8080);
 
-entities = {};
+players = {};
+bullets = {};
 entitiesId = 0;
 
 var io = require('./server/socket.js')(serv);

@@ -9,6 +9,8 @@ function Player() {
 
 	this.width = 48;
 	this.height = 48;
+
+	players[this.id] = this;
 }
 
 Player.prototype = Object.create(Entity.prototype);
@@ -27,11 +29,11 @@ Object.assign(Player.prototype, {
 		}
 
 		var colliding = false;
-		for (var key in entities) {
-			if (entities.hasOwnProperty(key) && entities[key] != this) {
-				var entity = entities[key];
+		for (var key in players) {
+			if (players.hasOwnProperty(key) && players[key] != this) {
+				var player = players[key];
 
-				if (this.checkCollision(entity) && entity.type == 'Player' && entity.alive() && this.alive()) {
+				if (this.checkCollision(player) && player.type == 'Player' && player.alive() && this.alive()) {
 					colliding = true;
 					this.getHurt(1);
 				}
